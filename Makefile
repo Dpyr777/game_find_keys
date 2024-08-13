@@ -1,9 +1,9 @@
 CXX = g++
 CXXFLAGS = -c
 
-all: sfml-app
+all: game
 
-sfml-app: main.o player.o enemy.o
+game: main.o player.o enemy.o
 	$(CXX) $^ -o $@ -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio  
 
 main.o: main.cpp
@@ -15,6 +15,6 @@ player.o: player.cpp
 enemy.o: enemy.cpp
 	$(CXX) $(CXXFLAGS) $<
 
-run: sfml-app
+run: game
 	./$<
 

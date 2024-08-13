@@ -94,7 +94,7 @@ int main()
     player.sprite.setTextureRect(sf::IntRect(64, 45, 64, 115));
 
     int numEnemy = 7;
-    Enemy* enemy = new Enemy[numEnemy ];
+    Enemy* enemy = new Enemy[numEnemy];
     sf::Texture texture_pig;
     texture_pig.loadFromFile("run_pig_32x32.png");
     std::srand(std::time(0));
@@ -150,15 +150,15 @@ int main()
                 window.close();
         }
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
             player.dx = -0.1f;
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
             player.dx = 0.1f;
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
         {
             if (player.onGround)
             {
@@ -167,7 +167,7 @@ int main()
                 jump.play();
             }
         }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
         }
 
