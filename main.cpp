@@ -34,14 +34,6 @@ std::vector<std::string> game_parameters::tileMap;
 
 int main()
 {
-    //sf::RectangleShape rectangle;
-    //rectangle.setSize(sf::Vector2f(32, 32));
-    // texture_player.loadFromFile("knight.jpg"); // start x = 435, y = 45, width = 137, height = 150; run: x = 435 y = 190;
-        //float currentFrame{};
-        //sf::Sprite sprite;
-        //sprite.setTexture(texture_player);
-        //sprite.setTextureRect(sf::IntRect(0, 20, 190, 130));
-        //sprite.setPosition(50, 50);
     std::string nameFile{"tile_map.txt"};
     std::ifstream fin(nameFile);
     if (!fin.is_open())
@@ -66,10 +58,9 @@ int main()
     {
         ++COL;
     }
-    sf::RenderWindow window(sf::VideoMode(MAP_WIDTH, MAP_HEIGHT), "2D-Game!");
+    sf::RenderWindow window(sf::VideoMode(MAP_WIDTH, MAP_HEIGHT), "Find_key");
 
-    sf::Texture texture_player, texture_heart, texture_background;
-    texture_player.loadFromFile("star_wars1.png"); // start x = 0 y = 20, width = 190, height = 130; 
+    sf::Texture texture_heart, texture_background;
     texture_heart.loadFromFile("heart_32x32.png");
     texture_background.loadFromFile("background.jpg");
 
@@ -90,8 +81,10 @@ int main()
     //---------------------- Tile MAP -------------------------;
 
 
-    Player player(texture_player);
-    player.sprite.setTextureRect(sf::IntRect(64, 45, 64, 115));
+    std::string str_texture{"star_wars1.png"};
+    float player_speed = 0.1f;
+    int player_hp = 3;
+    Player player(str_texture, sf::IntRect(64,  45, 64, 115), sf::FloatRect(2 * 32, ground, 64, 115), player_speed, player_hp);
 
     int numEnemy = 7;
     Enemy* enemy = new Enemy[numEnemy];
@@ -104,21 +97,13 @@ int main()
         enemy[i].set(texture_pig, (2 * rd + 2) * 32, (ROW - 2 - rd) * 32 ); 
         enemy[i].sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
     }
-    //enemy.sprite.scale(2.f, 2.f);
+    enemy[0].sprite.scale(2.f, 2.f);
 
     sf::Sprite sprite_heart;
     sprite_heart.setTexture(texture_heart);
-    sf::FloatRect rect_heart(sf::FloatRect(0, 0, 97, 25));
-    //sprite_heart.setTextureRect(sf::IntRect(0, 0, 97, 25));
 
     sf::Sprite sprite_background;
     sprite_background.setTexture(texture_background);
-
-
-
-    sf::SoundBuffer buffer;
-    buffer.loadFromFile("fart_11.ogg");
-    sf::Sound jump(buffer);
 
     sf::Music music;
     music.openFromFile("music_fon.ogg");
@@ -130,18 +115,15 @@ int main()
     sf::Clock clock_hp;
     clock_hp.restart();
     sf::Time time_hp;
+    //player.sprite.setPosition((player.rect.left - offsetX), (player.rect.top - offsetY)); // position player coord;
+    player.sprite.scale(0.5, 0.5);
+
 
     while (window.isOpen())
     {
         float time = clock.getElapsedTime().asMicroseconds();
         clock.restart();
-        //std::cout << "time1 = " << time << std::endl;
-
-
         time = time / 600; // control speed person;
-    
-        //std::cout << "time2 = " << time << std::endl;
-
 
         sf::Event event;
         while (window.pollEvent(event))
@@ -149,28 +131,7 @@ int main()
             if (event.type == sf::Event::Closed)
                 window.close();
         }
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        {
-            player.dx = -0.1f;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        {
-            player.dx = 0.1f;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-        {
-            if (player.onGround)
-            {
-                player.dy = -0.4f; // speed jump
-                player.onGround = false;
-                jump.play();
-            }
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        {
-        }
-
+        player.control();
 
         window.clear();
         player.update(time);
