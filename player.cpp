@@ -47,6 +47,8 @@ void Player::control()
     {
        state = down;
        sprite.scale(1.0001f, 1.0001f);
+       rect.height *= 1.0001f;
+       rect.width *= 1.0001f;
     }
 }
 void Player::update(float time)
@@ -61,9 +63,9 @@ void Player::update(float time)
     if (dx != 0 || state == down)
     {
         currentFrame += 0.005 * time;
-        sizeRectSprite.left = 64 + (192 * static_cast<int>(currentFrame));
         if (currentFrame > 4)
             currentFrame -= 4;
+        sizeRectSprite.left = 64 + (192 * static_cast<int>(currentFrame));
         if (state == right)
         {
             sizeRectSprite.top = 45;

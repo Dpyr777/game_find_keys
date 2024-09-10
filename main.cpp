@@ -84,7 +84,7 @@ int main()
     std::string str_texture{"star_wars1.png"};
     float player_speed = 0.1f;
     int player_hp = 3;
-    Player player(str_texture, sf::IntRect(64,  45, 64, 115), sf::FloatRect(2 * 32, ground, 64, 115), player_speed, player_hp);
+    Player player(str_texture, sf::IntRect(64,  45, 64, 115), sf::FloatRect(2 * 32, ground, 64 * 0.5, 115 * 0.5), player_speed, player_hp);
 
     int numEnemy = 7;
     Enemy* enemy = new Enemy[numEnemy];
