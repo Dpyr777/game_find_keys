@@ -54,8 +54,10 @@ class Player : public Entity
         bool onGround;
         sf::SoundBuffer buf_jump;
         sf::SoundBuffer buf_key;
+        sf::SoundBuffer buf_eat;
         sf::Sound sound_key;
         sf::Sound sound_jump;
+        sf::Sound sound_eat;
 
         Player(std::string &str_texture, sf::IntRect intRect, sf::FloatRect rect, float speed, int player_hp);
         void control();

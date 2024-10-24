@@ -58,55 +58,79 @@ int main()
     {
         ++COL;
     }
-    sf::RenderWindow window(sf::VideoMode(MAP_WIDTH, MAP_HEIGHT), "Find_key");
+    sf::RenderWindow window(sf::VideoMode(MAP_WIDTH, MAP_HEIGHT), "./textures/Find_key");
 
-    sf::Texture texture_heart, texture_background;
-    texture_heart.loadFromFile("heart_32x32.png");
-    texture_background.loadFromFile("background.jpg");
 
-    //---------------------- Tile MAP -------------------------:
-    sf::Texture texture_tile;
-    texture_tile.loadFromFile("tile_set.png");
+    //----------------------BEGIN Tile MAP -------------------------:
+    sf::Texture texture_tile; //for tile and key
+    texture_tile.loadFromFile("./textures/tile_set.png");
 
     sf::Sprite sprite_tile;
     sprite_tile.setTexture(texture_tile);
     sprite_tile.setTextureRect(sf::IntRect(0, 0, 32, 32));
+    //----------------------END Tile MAP -------------------------;
 
+    //----------------------BEGIN KEY -------------------------;
     sf::Sprite sprite_key;
     sprite_key.setTexture(texture_tile);
     sprite_key.setTextureRect(sf::IntRect(460, 639, 50, 75)); 
     sprite_key.scale(0.5f, 0.5f);
+    //----------------------END KEY -------------------------;
+
+    //----------------------BEGIN CAKE -------------------------;
+    sf::Texture texture_cake;
+    texture_cake.loadFromFile("./textures/cake.png");
+    sf::Sprite sprite_cake;
+    sprite_cake.setTexture(texture_cake);
+    sprite_cake.setTextureRect(sf::IntRect(5, 10, 46, 33));
+    //----------------------END CAKE -------------------------;
 
 
-    //---------------------- Tile MAP -------------------------;
 
-
-    std::string str_texture{"star_wars1.png"};
+    //----------------------BEGIN PLAYER -------------------------;
+    
+    std::string str_texture{"./textures/star_wars1.png"};
     float player_speed = 0.1f;
     int player_hp = 3;
-    Player player(str_texture, sf::IntRect(64,  45, 64, 115), sf::FloatRect(2 * 32, ground, 64 * 0.5, 115 * 0.5), player_speed, player_hp);
+    Player player(str_texture, sf::IntRect(64, 45, 64, 115), sf::FloatRect(2 * 32, ground, 64, 115), player_speed, player_hp);
+
+    //----------------------END PLAYER -------------------------;
 
     int numEnemy = 7;
     Enemy* enemy = new Enemy[numEnemy];
     sf::Texture texture_pig;
-    texture_pig.loadFromFile("run_pig_32x32.png");
+    texture_pig.loadFromFile("./textures/run_pig_32x32.png");
     std::srand(std::time(0));
     for (int i{}; i < numEnemy; ++i)
     {
-        int rd = rand() % 30;
-        enemy[i].set(texture_pig, (2 * rd + 2) * 32, (ROW - 2 - rd) * 32 ); 
+        //int rd = rand() % 30;
+        //enemy[i].set(texture_pig, (2 * rd + 2) * 32, (ROW - 2 - rd) * 32 ); 
+        //enemy[i].sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
+        if (i == 0) enemy[i].set(texture_pig, 80 * 32,  9 * 32 ); 
+        else if (i == 1) enemy[i].set(texture_pig, 36 * 32, 8 * 32 ); 
+        else if (i == 2) enemy[i].set(texture_pig, 36 * 32, 36 * 32 ); 
+        else if (i == 3) enemy[i].set(texture_pig, 80 * 32,  36 * 32 ); 
+        else if (i == 4) enemy[i].set(texture_pig, 130 * 32, 8 * 32 ); 
+        else if (i == 5) enemy[i].set(texture_pig, 130 * 32, 36 * 32 ); 
+        else if (i == 6) enemy[i].set(texture_pig, 130 * 32, 25 * 32 ); 
         enemy[i].sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
     }
-    enemy[0].sprite.scale(2.f, 2.f);
+    //enemy[0].sprite.scale(2.f, 2.f);
 
+    //----------------------BEGIN HEART -------------------------;
+    sf::Texture texture_heart;
+    texture_heart.loadFromFile("./textures/heart_32x32.png");
     sf::Sprite sprite_heart;
     sprite_heart.setTexture(texture_heart);
+    //----------------------END HEART -------------------------;
 
+    sf::Texture  texture_background;
+    texture_background.loadFromFile("./textures/background.jpg");
     sf::Sprite sprite_background;
     sprite_background.setTexture(texture_background);
 
     sf::Music music;
-    music.openFromFile("music_fon.ogg");
+    music.openFromFile("./sounds/music_fon.ogg");
     music.play();
     music.setLoop(true);
     music.setVolume(50.f);
@@ -116,7 +140,7 @@ int main()
     clock_hp.restart();
     sf::Time time_hp;
     //player.sprite.setPosition((player.rect.left - offsetX), (player.rect.top - offsetY)); // position player coord;
-    player.sprite.scale(0.5, 0.5);
+    //player.sprite.scale(0.5, 0.5);
 
 
     while (window.isOpen())
@@ -147,19 +171,23 @@ int main()
                 time_hp = clock_hp.getElapsedTime();
                 if (player.dy > 0)
                 {
-                    enemy[i].dx = 0;
                     player.dy = -0.4;
-                    enemy[i].life = false;
+                    //enemy[i].dx = 0;
+                    //enemy[i].life = false;
                 }
                 else if (time_hp > sf::seconds(2.f) && player.hp > 0) 
                 {
                     --player.hp;
                     clock_hp.restart();
-                    if (player.hp == 0)
+                    if (player.hp == 1)
                     {
                         player.sprite.setColor(sf::Color::Red);
+                    }
+                    else if (player.hp == 0)
+                    {
                         return 0;
                     }
+                    
                 }
             }
         }
@@ -168,7 +196,7 @@ int main()
         //if (player.rect.top > MAP_HEIGHT / 2 && player.rect.top < (ROW * 32 - 150))
             offsetY = player.rect.top - MAP_HEIGHT / 2;
 
-        player.life = false;
+        //player.life = false;
         for (int i{}; i < ROW; ++i)
         {
             for (int j{}; j < COL; ++j)
@@ -180,6 +208,16 @@ int main()
                     player.life = true;
                     sprite_key.setPosition(j * 32 - offsetX, i * 32 - offsetY);
                     window.draw(sprite_key);
+                }
+                else if (tileMap[i][j] == 'C')
+                {
+                    sprite_cake.setPosition(j * 32 - offsetX, i * 32 - offsetY); 
+                    window.draw(sprite_cake);
+                }
+                else if (tileMap[i][j] == 'C')
+                {
+                    sprite_cake.setPosition(j * 32 - offsetX, i * 32 - offsetY); 
+                    window.draw(sprite_cake);
                 }
                 else
                 {

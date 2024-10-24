@@ -16,10 +16,12 @@ Player::Player(std::string &str_texture, sf::IntRect intRect, sf::FloatRect rect
     offsetY = rect.top - MAP_HEIGHT / 2;
     sprite.setPosition((rect.left - offsetX), (rect.top - offsetY)); // position player coord;
                                                                            
-    buf_key.loadFromFile("key.ogg");
-    buf_jump.loadFromFile("jump_player.ogg");
+    buf_key.loadFromFile("./sounds/key.ogg");
+    buf_jump.loadFromFile("./sounds/jump_player.ogg");
+    buf_eat.loadFromFile("./sounds/eating_cake.ogg");
     sound_key.setBuffer(buf_key);
     sound_jump.setBuffer(buf_jump);
+    sound_eat.setBuffer(buf_eat);
 }
 void Player::control()
 { 
@@ -43,7 +45,8 @@ void Player::control()
             sound_jump.play();
         }
     }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    // false;
+    if (false && (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)))
     {
        state = down;
        sprite.scale(1.0001f, 1.0001f);
@@ -108,6 +111,14 @@ void Player::CollisionX()
                 tileMap[i][j] = ' ';
                 life = false; // GameOver
             }
+            else if (tileMap[i][j] == 'C' || tileMap[i][j] == 'S')
+            {
+                sound_eat.play();
+                tileMap[i][j] = ' ';
+                sprite.scale(0.8f, 0.8f);
+                rect.height *= 0.8f;
+                rect.width *= 0.8f;
+            }
         }
     }
 }
@@ -135,6 +146,14 @@ void Player::CollisionY()
             {
                 sound_key.play();
                 tileMap[i][j] = ' ';
+            }
+            else if (tileMap[i][j] == 'C')
+            {
+                sound_eat.play();
+                tileMap[i][j] = ' ';
+                sprite.scale(0.8f, 0.8f);
+                rect.height *= 0.8f;
+                rect.width *= 0.8f;
             }
         }
     }

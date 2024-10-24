@@ -10,7 +10,7 @@ void Enemy::set(sf::Texture &image, int x, int y)
     sprite.setTexture(image);
     rect = sf::FloatRect(x, y, 32, 32);
 
-    dx = -0.05f;
+    dx = -0.06f;
     currentFrame = 0;
     life = true;
 }
@@ -41,12 +41,12 @@ void Enemy::Collision()
                 if (dx > 0)
                 {
                     rect.left = j * 32 - rect.width;
-                    dx = -0.05f;
+                    dx = -0.06f;
                 }
                 else
                 {
                     rect.left = j * 32 + 32;
-                    dx = 0.05f;
+                    dx = 0.06f;
                 }
             }
         }
